@@ -5,9 +5,10 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('certs');
   const [search, setSearch] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState('All');
+  const [activeModal, setActiveModal] = useState(null);
   const [cliInput, setCliInput] = useState('');
   const [cliLogs, setCliLogs] = useState([
-    'Abdul Ghaffar Portfolio CLI v2.0.0',
+    'Abdul Ghaffar Portfolio CLI v2.1.0 (Production Verified)',
     'Type "help" to see available terminal commands.'
   ]);
 
@@ -17,32 +18,35 @@ export default function App() {
       title: "YOLOv8 Computer Vision Analytics Engine",
       category: "ML/AI",
       desc: "Real-time object detection and spatial analytics system built with YOLOv8, OpenCV, and Python.",
-      tech: ["Python", "YOLOv8", "OpenCV", "PyTorch"]
+      tech: ["Python", "YOLOv8", "OpenCV", "PyTorch"],
+      link: "#"
     },
     {
       id: 2,
       title: "Benchmark Classification & ML Pipeline",
       category: "ML/AI",
       desc: "End-to-end data preprocessing, model selection, and hyperparameter tuning pipeline for tabular datasets.",
-      tech: ["Scikit-Learn", "Pandas", "NumPy", "MLflow"]
+      tech: ["Scikit-Learn", "Pandas", "NumPy", "MLflow"],
+      link: "#"
     },
     {
       id: 3,
       title: "Full-Stack MERN Portfolio & Dashboards",
       category: "Web Dev",
       desc: "High-performance React web application with interactive shell CLI and responsive dashboard components.",
-      tech: ["React.js", "Node.js", "Express", "Tailwind CSS"]
+      tech: ["React.js", "Node.js", "Express", "Tailwind CSS"],
+      link: "#"
     },
     {
       id: 4,
       title: "Real Estate Price Prediction Engine",
       category: "Data Science",
       desc: "Statistical regression and EDA dashboard for predictive real estate modeling.",
-      tech: ["Python", "Seaborn", "Scikit-Learn", "Flask"]
+      tech: ["Python", "Seaborn", "Scikit-Learn", "Flask"],
+      link: "#"
     }
   ];
 
-  // Group certificates strictly by platform/issuer
   const platformsList = [
     { key: "Datheon", title: "💼 Machine Learning Internships (2026)" },
     { key: "Cisco NetAcad", title: "🌐 Cisco Networking Academy (10 Certificates)" },
@@ -58,7 +62,7 @@ export default function App() {
 
       switch (cmd) {
         case 'help':
-          response = 'Commands: bio, certs, projects, skills, clear';
+          response = 'Commands: bio, certs, projects, skills, contact, clear';
           break;
         case 'bio':
           response = 'Abdul Ghaffar | BSCS Student (Virtual University of Pakistan) | DAE CIT | ML & Full-Stack Engineer';
@@ -71,6 +75,9 @@ export default function App() {
           break;
         case 'skills':
           response = 'Python, Scikit-Learn, YOLOv8, MERN Stack, React.js, Node.js, SQL, Cisco Networking';
+          break;
+        case 'contact':
+          response = 'Email: abdulghaffarturk7455@gmail.com | GitHub: github.com/abdulghaffar425';
           break;
         case 'clear':
           setCliLogs([]);
@@ -87,12 +94,36 @@ export default function App() {
 
   return (
     <div style={{ backgroundColor: '#0f172a', color: '#f8fafc', minHeight: '100vh', padding: '2rem', fontFamily: 'sans-serif' }}>
-      {/* Header */}
-      <header style={{ marginBottom: '2rem', borderBottom: '1px solid #334155', paddingBottom: '1rem' }}>
-        <h1 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: '#38bdf8' }}>ABDUL GHAFFAR</h1>
-        <p style={{ fontSize: '1.1rem', color: '#94a3b8' }}>
-          Machine Learning & Full-Stack Engineer | BSCS (Virtual University of Pakistan) | DAE CIT
-        </p>
+      
+      {/* Header & Quick Action Bar */}
+      <header style={{ marginBottom: '2rem', borderBottom: '1px solid #334155', paddingBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+        <div>
+          <h1 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: '#38bdf8', margin: 0 }}>ABDUL GHAFFAR</h1>
+          <p style={{ fontSize: '1.1rem', color: '#94a3b8', margin: '0.5rem 0 0 0' }}>
+            Machine Learning & Full-Stack Engineer | BSCS (Virtual University of Pakistan) | DAE CIT
+          </p>
+        </div>
+        <div>
+          <a
+            href="/resume.pdf"
+            download="Abdul_Ghaffar_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              backgroundColor: '#0284c7',
+              color: '#fff',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '0.375rem',
+              fontWeight: 'bold',
+              textDecoration: 'none',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              transition: 'background-color 0.2s'
+            }}
+          >
+            📄 Download Resume (PDF)
+          </a>
+        </div>
       </header>
 
       {/* Interactive CLI Terminal */}
@@ -110,7 +141,7 @@ export default function App() {
             value={cliInput}
             onChange={(e) => setCliInput(e.target.value)}
             onKeyDown={handleCommand}
-            placeholder="Type command (e.g. help, bio, certs, projects, skills)..."
+            placeholder="Type command (e.g. help, bio, certs, projects, skills, contact)..."
             style={{ backgroundColor: 'transparent', border: 'none', color: '#f8fafc', width: '100%', outline: 'none', fontFamily: 'monospace' }}
           />
         </div>
@@ -152,7 +183,7 @@ export default function App() {
 
       {activeTab === 'certs' && (
         <div style={{ marginBottom: '2rem' }}>
-          {/* Quick Platform Jumper Buttons */}
+          {/* Platform Filter Buttons */}
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
             <button
               onClick={() => setSelectedPlatform('All')}
@@ -221,18 +252,38 @@ export default function App() {
                   </h2>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
                     {platformCerts.map(cert => (
-                      <div key={cert.id} style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '0.5rem', padding: '1rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                          <span style={{ fontSize: '0.75rem', backgroundColor: '#0369a1', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', color: '#e0f2fe' }}>
-                            {cert.category}
-                          </span>
-                          <span style={{ fontSize: '0.75rem', color: '#38bdf8', fontWeight: 'bold' }}>
-                            {cert.date}
-                          </span>
+                      <div key={cert.id} style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '0.5rem', padding: '1rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <span style={{ fontSize: '0.75rem', backgroundColor: '#0369a1', padding: '0.2rem 0.5rem', borderRadius: '0.25rem', color: '#e0f2fe' }}>
+                              {cert.category}
+                            </span>
+                            <span style={{ fontSize: '0.75rem', color: '#38bdf8', fontWeight: 'bold' }}>
+                              {cert.date}
+                            </span>
+                          </div>
+                          <h3 style={{ fontSize: '1.05rem', margin: '0.5rem 0 0.25rem 0', color: '#f8fafc' }}>{cert.title}</h3>
+                          <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0 }}>{cert.issuer}</p>
+                          <p style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '0.5rem' }}>Code: {cert.code}</p>
                         </div>
-                        <h3 style={{ fontSize: '1.05rem', margin: '0.5rem 0 0.25rem 0', color: '#f8fafc' }}>{cert.title}</h3>
-                        <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0 }}>{cert.issuer}</p>
-                        <p style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '0.5rem' }}>Code: {cert.code}</p>
+                        
+                        <button
+                          onClick={() => setActiveModal(cert)}
+                          style={{
+                            marginTop: '1rem',
+                            backgroundColor: '#0284c7',
+                            color: '#fff',
+                            border: 'none',
+                            padding: '0.4rem 0.8rem',
+                            borderRadius: '0.25rem',
+                            fontSize: '0.85rem',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            alignSelf: 'flex-start'
+                          }}
+                        >
+                          👁️ View Credential
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -259,6 +310,27 @@ export default function App() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Certificate Detail Modal */}
+      {activeModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '1rem' }}>
+          <div style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '0.5rem', padding: '1.5rem', maxWidth: '500px', width: '100%', color: '#f8fafc' }}>
+            <h3 style={{ fontSize: '1.25rem', color: '#38bdf8', marginTop: 0 }}>{activeModal.title}</h3>
+            <p><strong>Issuing Body:</strong> {activeModal.issuer}</p>
+            <p><strong>Credential ID / Code:</strong> {activeModal.code}</p>
+            <p><strong>Year / Date:</strong> {activeModal.date}</p>
+            <p><strong>Domain:</strong> {activeModal.category}</p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1.5rem' }}>
+              <button
+                onClick={() => setActiveModal(null)}
+                style={{ backgroundColor: '#64748b', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.25rem', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
